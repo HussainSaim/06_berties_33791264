@@ -3,7 +3,7 @@ var express = require ('express')
 var ejs = require('ejs')
 const path = require('path')
 var mysql = require('mysql2');
-
+require('dotenv').config();
 // Create the express application object
 const app = express()
 const port = 8000
@@ -36,9 +36,9 @@ app.use('/books', booksRoutes)
 // Define the database connection pool
 const db = mysql.createPool({
     host: 'localhost',
-    user: 'berties_books_app',
-    password: 'qwertyuiop',
-    database: 'berties_books',
+    user: process.env.BB_USER,
+    password: process.env.BB_PASSWORD,
+    database: process.env.BB_DATABASE,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
