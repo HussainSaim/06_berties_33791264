@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Class List - <%=shopData.shopName%></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <h1>Available Classes</h1>
+    <table border="1">
+      <tr>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Level</th>
+        <th>Location</th>
+        <th>Date & Time</th>
+        <th>Capacity</th>
+        <th>Description</th>
+      </tr>
+      <% availableClasses.forEach(function(classItem) { %>
+        <tr>
+          <td><%= classItem.title %></td>
+          <td><%= classItem.category %></td>
+          <td><%= classItem.level %></td>
+          <td><%= classItem.location %></td>
+          <td><%= classItem.class_datetime %></td>
+          <td><%= classItem.capacity %></td>
+          <td><%= classItem.description %></td>
+        </tr>
+      <% }); %>
+    </table>
+    <p><a href="/">Back to Home</a></p>
+  </body>
+</html>
