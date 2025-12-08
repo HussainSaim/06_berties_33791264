@@ -3,7 +3,6 @@ var express = require ('express')
 var ejs = require('ejs')
 const path = require('path')
 var mysql = require('mysql2');
-const session = require('express-session');
 require('dotenv').config();
 // Create the express application object
 const expressSanitizer = require('express-sanitizer');
@@ -16,22 +15,12 @@ app.set('view engine', 'ejs')
 // Set up the body parser 
 app.use(express.urlencoded({ extended: true }))
 
-// Create a session
-app.use(session({
-    secret: 'somerandomstuff',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        expires: 600000
-    }
-}))
-
 // Set up public folder (for css and static js)
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(expressSanitizer());
 // Define our application-specific data
-app.locals.shopData = {shopName: "Cassie's Classes"}
+app.locals.shopData = {shopName: "Bertie's Books"}
 
 // Load the route handlers
 const mainRoutes = require("./routes/main")
@@ -41,17 +30,20 @@ app.use('/', mainRoutes)
 const usersRoutes = require('./routes/users')
 app.use('/users', usersRoutes)
 
-// Load the route handlers for /classes
-const classesRoutes = require('./routes/classes')
-app.use('/classes', classesRoutes)
+// Load the route handlers for /books
+const booksRoutes = require('./routes/books')
+app.use('/books', booksRoutes)
 
+// Load the route handlers for /api
+const apiRoutes = require('./routes/api')
+app.use('/api', apiRoutes)
 
 // Define the database connection pool
 const db = mysql.createPool({
     host: 'localhost',
-    user: process.env.HEALTH_USER,
-    password: process.env.HEALTH_PASSWORD,
-    database: process.env.HEALTH_DATABASE,
+    user: process.env.BB_USER,
+    password: process.env.BB_PASSWORD,
+    database: process.env.BB_DATABASE,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,

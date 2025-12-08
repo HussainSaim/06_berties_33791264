@@ -1,6 +1,6 @@
-# Cassie's Classes
+# Berties Books
 
-Sample website for Dynamic Web Applications module.
+Sample code for Dynamic Web Applications module.
 
 Uses node.js with Express and EJS.
 
@@ -16,14 +16,15 @@ To secure database credentials, this application uses the dotenv module to manag
 
  The `.env` file contains database credentials:
    ```
-  HEALTH_HOST='localhost'
-  HEALTH_USER='health_app'
-  HEALTH_PASSWORD='qwertyuiop'
-  HEALTH_DATABASE='health'
-  HEALTH_BASE_PATH='http://localhost:8000'
+   BB_USER='berties_books_app'
+   BB_PASSWORD='qwertyuiop'
+   BB_DATABASE='berties_books'
    ```
 The `require('dotenv').config()` statement in index.js loads these variables from the `.env` file into `process.env`
-
+ Database credentials are accessed via environment variables:
+   - `process.env.BB_USER`
+   - `process.env.BB_PASSWORD`
+   - `process.env.BB_DATABASE`
 
 
 ## Sanitisation
@@ -34,12 +35,16 @@ First Name
 Last Name
 Email
 Username
-
+Book Name
+Book Price
 
 I have not included password as the input is hashed before INSERT so XSS is not possible.
 
 
 ## Validation
 
-I have applied validation in the registeration page to ensure that the username, first name and last name was not empty. I also used it to ensure the email was input in the correct format and to ensure that users created a password longer than 8 characters.
+I have valiadted the values of the name (of the book) to make sure it is not empty. I have also validated the price by ensuring it is a float of at least 0.01.
 
+## API 
+
+The API consists of all the books in the database and allows it to be called upon. It can be sorted by name and price as well as the ability to search.
