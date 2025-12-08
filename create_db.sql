@@ -1,17 +1,36 @@
-# Create database script for Berties books
+-- create_db.sql
 
-# Create the database
-CREATE DATABASE IF NOT EXISTS berties_books;
-USE berties_books;
+-- Create database (you can change the name if you want)
+CREATE DATABASE IF NOT EXISTS health;
+USE health;
 
-# Create the tables
-CREATE TABLE IF NOT EXISTS books (
-    id     INT AUTO_INCREMENT,
-    name   VARCHAR(50),
-    price  DECIMAL(5, 2),
-    PRIMARY KEY(id));
+-- Classes table
+CREATE TABLE classes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL,      -- e.g. Yoga, HIIT, Pilates
+    level VARCHAR(20) NOT NULL,         -- e.g. Beginner, Intermediate
+    location VARCHAR(100) NOT NULL,
+    class_datetime DATETIME NOT NULL,
+    capacity INT NOT NULL,
+    description TEXT
+);
 
-CREATE TABLE IF NOT EXISTS users (
+-- Bookings table
+CREATE TABLE bookings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    class_id INT NOT NULL,
+    user_id INT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_bookings_class
+      FOREIGN KEY (class_id) REFERENCES classes(id)
+      ON DELETE CASCADE,
+    CONSTRAINT fk_bookings_user
+      FOREIGN KEY (user_id) REFERENCES users(id)
+      ON DELETE CASCADE
+);
+
+ CREATE TABLE IF NOT EXISTS users (
     id              INT AUTO_INCREMENT,
     username        VARCHAR(50) NOT NULL UNIQUE,
     firstName       VARCHAR(50) NOT NULL,
@@ -20,5 +39,5 @@ CREATE TABLE IF NOT EXISTS users (
     hashedPassword  VARCHAR(255) NOT NULL,
     PRIMARY KEY(id));
 
-CREATE USER IF NOT EXISTS 'berties_books_app'@'localhost' IDENTIFIED BY 'qwertyuiop'; 
-GRANT ALL PRIVILEGES ON berties_books.* TO ' berties_books_app'@'localhost';
+CREATE USER IF NOT EXISTS 'health_app'@'localhost' IDENTIFIED BY 'qwertyuiop'; 
+GRANT ALL PRIVILEGES ON health.* TO 'health_app'@'localhost';

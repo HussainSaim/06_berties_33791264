@@ -54,16 +54,6 @@ router.post('/registered',
 });
 
 
-router.get('/list', redirectLogin, function(req, res, next) {
-    let sqlquery = "SELECT id, username, firstName, lastName, email FROM users"; // query database to get all users (excluding passwords)
-    // execute sql query
-    db.query(sqlquery, (err, result) => {
-        if (err) {
-            next(err)
-        }
-        res.render("userlist.ejs", {availableUsers: result})
-    });
-});
 
 router.get('/login', function (req, res, next) {
     res.render('login.ejs')
@@ -83,9 +73,10 @@ router.post('/loggedin', function (req, res, next) {
             res.send('Login failed! Username not found.')
         }
         else {
-            // Extract the hashed password from database
-            const hashedPassword = result[0].hashedPassword
-            const firstName = result[0].firstName
+            // Extract the user data from database
+            const user = result[0];
+            const hashedPassword = user.hashedPassword;
+            const firstName = user.firstName;
             // Compare the plain password with the hashed password from database
             bcrypt.compare(req.body.password, hashedPassword, function(err, isPasswordCorrect) {
                 if (err) {
@@ -93,7 +84,14 @@ router.post('/loggedin', function (req, res, next) {
                 }
                 else if (isPasswordCorrect) {
                     // Save user session here, when login is successful
-                    req.session.userId = req.body.username;
+                    req.session.userId = user.username;
+                    req.session.userDetails = {
+                        id: user.id,
+                        username: user.username,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email
+                    };
                     // Redirect to home page after successful login
                     res.redirect('/');
                 }
